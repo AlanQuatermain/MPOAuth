@@ -376,7 +376,7 @@
 		CBD2648E111F46910003486C /* OAuthClientController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuthClientController.h; sourceTree = "<group>"; };
 		CBD2648F111F46910003486C /* OAuthClientController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuthClientController.m; sourceTree = "<group>"; };
 		CBD26497111F46CD0003486C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		CBD264A1111F47000003486C /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = InfoPlist.strings; sourceTree = "<group>"; };
+		CBD264A1111F47000003486C /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = InfoPlist.strings; sourceTree = "<group>"; };
 		CBD264A3111F47000003486C /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = MainMenu.xib; sourceTree = "<group>"; };
 		CBD26517111F4B180003486C /* MPOAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MPOAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */

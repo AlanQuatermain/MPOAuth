@@ -11,10 +11,6 @@
 #import "MPOAuthAPI.h"
 #import "MPOAuthAPIRequestLoader.h"
 
-extern NSString * const MPOAuthRequestTokenURLKey;
-extern NSString * const MPOAuthUserAuthorizationURLKey;
-extern NSString * const MPOAuthUserAuthorizationMobileURLKey;
-
 extern NSString * const MPOAuthNotificationRequestTokenReceived;
 extern NSString * const MPOAuthNotificationRequestTokenRejected;
 
@@ -38,10 +34,11 @@ extern NSString * const MPOAuthNotificationRequestTokenRejected;
 @end
 
 @protocol MPOAuthAuthenticationMethodOAuthDelegate <NSObject>
+
+// AQ: Looking at the source, these all appear to be optional...
+@optional
 - (NSURL *)callbackURLForCompletedUserAuthorization;
 - (BOOL)automaticallyRequestAuthenticationFromURL:(NSURL *)inAuthURL withCallbackURL:(NSURL *)inCallbackURL;
-
-@optional
 - (NSString *)oauthVerifierForCompletedUserAuthorization;
 - (void)authenticationDidFailWithError:(NSError *)error;
 @end

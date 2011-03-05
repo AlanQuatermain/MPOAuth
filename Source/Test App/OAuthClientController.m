@@ -26,19 +26,17 @@
 
 - (void)awakeFromNib {
 	if (_oauthAPI) {
-		[progressIndicator setHidden:NO];
-		[progressIndicator startAnimation:self];
+		[tokenProgressIndicator setHidden:NO];
+		[tokenProgressIndicator startAnimation:self];
 	}
 }
 
 - (void)requestTokenReceived:(NSNotification *)inNotification {
-	[progressIndicator stopAnimation:self];
-	[authenticationButton setTitle:@"Request User Access"];
+	[tokenProgressIndicator stopAnimation:self];
 }
 
 - (void)accessTokenReceived:(NSNotification *)inNotification {
-	[progressIndicator stopAnimation:self];
-	[authenticationButton setTitle:@"Access Token Acquired"];
+	[accessProgressIndicator stopAnimation:self];
 }
 
 - (IBAction)performAuthentication:(id)sender {
@@ -48,10 +46,43 @@
 																				nil];
 		_oauthAPI = [[MPOAuthAPI alloc] initWithCredentials:credentials
 										  authenticationURL:[NSURL URLWithString:[authenticationURLField stringValue]]
-												 andBaseURL:[NSURL URLWithString:[baseURLField stringValue]]];		
+												 andBaseURL:[NSURL URLWithString:[baseURLField stringValue]]];	
+		id authMethod = _oauthAPI.authenticationMethod;
+		if ( [authMethod isKindOfClass: [MPOAuthAuthenticationMethodOAuth class]] )
+			[authMethod setDelegate: self];
 	} else {
 		[_oauthAPI authenticate];
 	}
+}
+
+- (IBAction)getUserAccess:(id)sender {
+	if (!_oauthAPI) {
+		NSAlert * alert = [[NSAlert alertWithMessageText: NSLocalizedString(@"Not Initialized", @"")
+										   defaultButton: NSLocalizedString(@"OK", @"")
+										 alternateButton: @""
+											 otherButton: @""
+							   informativeTextWithFormat: NSLocalizedString(@"Please enter credentials and click Request Token first.", @"")] retain];
+		[NSApp beginSheetModalForWindow: [alert window] completionHandler: ^(NSInteger result) {
+			[alert autorelease];
+		}];
+		return;
+	}
+	
+	[pinField resignFirstResponder];	// ensure it's not still in the middle of editing
+	if ( [[pinField stringValue] length] == 0 )
+	{
+		NSAlert * alert = [[NSAlert alertWithMessageText: NSLocalizedString(@"No PIN", @"")
+										   defaultButton: NSLocalizedString(@"OK", @"")
+										 alternateButton: @""
+											 otherButton: @""
+							   informativeTextWithFormat: NSLocalizedString(@"Please enter your verifier/PIN code in the provided field.", @"")] retain];
+		[NSApp beginSheetModalForWindow: [alert window] completionHandler: ^(NSInteger result) {
+			[alert autorelease];
+		}];
+		return;
+	}
+	
+	[_oauthAPI authenticate];
 }
 
 - (IBAction)performMethod:(id)sender {
@@ -60,6 +91,14 @@
 
 - (void)performedMethodLoadForURL:(NSURL *)inMethod withResponseBody:(NSString *)inResponseBody {
 	[responseBodyView setString:inResponseBody];
+}
+
+#pragma mark -
+#pragma mark MPOAuthAuthenticationMethodOAuthDelegate Protocol
+
+- (NSString *) oauthVerifierForCompletedUserAuthorization
+{
+	return ( [pinField stringValue] );
 }
 
 @end
